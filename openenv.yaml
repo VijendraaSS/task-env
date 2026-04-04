@@ -1,0 +1,36 @@
+name: task-prioritization-env
+version: 1.0
+
+description: >
+  An environment that simulates real-world task management and procrastination reduction.
+  The agent must complete tasks efficiently based on priority and deadlines.
+
+entry_point: env.environment:TaskPrioritizationEnv
+
+tasks:
+  - name: easy
+    description: Complete at least one task
+  - name: medium
+    description: Complete multiple tasks efficiently
+  - name: hard
+    description: Complete all tasks optimally before deadlines
+
+observation_space:
+  type: object
+  properties:
+    tasks:
+      type: list
+    time:
+      type: integer
+
+action_space:
+  type: object
+  properties:
+    type:
+      type: string
+    task_id:
+      type: integer
+
+reward:
+  type: float
+  range: [0.0, 1.0]
