@@ -1,9 +1,16 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, Request
+from fastapi.responses import JSONResponse
 from env.environment import TaskPrioritizationEnv
 from env.models import Action
 
 app = FastAPI()
 env = TaskPrioritizationEnv()
+
+# 👇 FIX ROOT HANDLING
+@app.get("/")
+@app.get("/?logs=container")
+def home():
+    return {"status": "running"}
 
 @app.post("/openenv/reset")
 def reset(payload: dict = Body(default={})):
@@ -23,7 +30,3 @@ def step(action: Action):
 @app.get("/openenv/state")
 def state():
     return env.state()
-
-@app.get("/")
-def home():
-    return {"status": "running"}
