@@ -1,0 +1,29 @@
+from fastapi import FastAPI, Body
+from env.environment import TaskPrioritizationEnv
+from env.models import Action
+
+app = FastAPI()
+env = TaskPrioritizationEnv()
+
+@app.post("/openenv/reset")
+def reset(payload: dict = Body(default={})):
+    obs = env.reset()
+    return obs.dict()
+
+@app.post("/openenv/step")
+def step(action: Action):
+    obs, reward, done, info = env.step(action)
+    return {
+        "observation": obs.dict(),
+        "reward": reward,
+        "done": done,
+        "info": info,
+    }
+
+@app.get("/openenv/state")
+def state():
+    return env.state()
+
+@app.get("/")
+def home():
+    return {"status": "running"}
